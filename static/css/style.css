@@ -1,0 +1,792 @@
+/* ========================================
+   1. CSS CUSTOM PROPERTIES (ROOT VARS)
+   ======================================== */
+:root {
+  --primary: #6C63FF;
+  --primary-dark: #5a52d5;
+  --secondary: #FF6584;
+  --success: #28a745;
+  --dark: #1a1a2e;
+  --dark-card: #16213e;
+  --light: #f8f9fa;
+  --border: #e0e0e0;
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.08);
+  --shadow-md: 0 4px 20px rgba(0, 0, 0, 0.12);
+  --shadow-lg: 0 8px 40px rgba(0, 0, 0, 0.15);
+  --radius: 12px;
+  --radius-sm: 8px;
+  --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ========================================
+   2. GLOBAL RESET & BASE
+   ======================================== */
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Poppins', sans-serif;
+  background: #f4f6f9;
+  color: #333;
+  line-height: 1.6;
+}
+
+a {
+  transition: var(--transition);
+  text-decoration: none;
+  color: var(--primary);
+}
+
+a:hover {
+  color: var(--primary-dark);
+}
+
+img {
+  max-width: 100%;
+}
+
+.fw-600 {
+  font-weight: 600;
+}
+
+.fw-700 {
+  font-weight: 700;
+}
+
+.fw-800 {
+  font-weight: 800;
+}
+
+/* ========================================
+   3. NAVBAR STYLES
+   ======================================== */
+.navbar {
+  padding: 12px 0;
+  transition: var(--transition);
+}
+
+.navbar-brand {
+  font-size: 1.6rem;
+  font-weight: 800;
+}
+
+.navbar-brand i {
+  color: var(--primary);
+}
+
+.search-form {
+  width: 380px;
+}
+
+.search-form .form-control {
+  border-radius: 25px 0 0 25px;
+  border: none;
+  padding: 10px 16px;
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+}
+
+.search-form .form-control::placeholder {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.search-form .form-control:focus {
+  background: rgba(255, 255, 255, 0.15);
+  box-shadow: none;
+  color: white;
+}
+
+.search-form .btn {
+  border-radius: 0 25px 25px 0;
+}
+
+.navbar.shadow-scroll {
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+/* ========================================
+   4. HERO SECTION
+   ======================================== */
+.hero-section {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  min-height: 520px;
+  display: flex;
+  align-items: center;
+  position: relative;
+  overflow: hidden;
+  padding: 60px 0;
+}
+
+.hero-section::before {
+  content: '';
+  position: absolute;
+  width: 500px;
+  height: 500px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 50%;
+  top: -200px;
+  right: -100px;
+}
+
+.hero-section::after {
+  content: '';
+  position: absolute;
+  width: 300px;
+  height: 300px;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 50%;
+  bottom: -100px;
+  left: -50px;
+}
+
+.hero-title {
+  font-size: 3rem;
+  font-weight: 800;
+  line-height: 1.2;
+}
+
+.hero-badge {
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(10px);
+  padding: 6px 16px;
+  border-radius: 20px;
+  display: inline-block;
+  font-size: 0.9rem;
+}
+
+/* ========================================
+   5. PRODUCT CARDS
+   ======================================== */
+.product-card {
+  border: none;
+  border-radius: var(--radius);
+  overflow: hidden;
+  transition: var(--transition);
+  box-shadow: var(--shadow-sm);
+  background: white;
+  height: 100%;
+}
+
+.product-card:hover {
+  transform: translateY(-6px);
+  box-shadow: var(--shadow-lg);
+}
+
+.product-img {
+  height: 220px;
+  width: 100%;
+  object-fit: cover;
+  transition: var(--transition);
+}
+
+.product-card:hover .product-img {
+  transform: scale(1.03);
+}
+
+.product-img-wrapper {
+  overflow: hidden;
+  position: relative;
+}
+
+.discount-badge {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background: #dc3545;
+  color: white;
+  padding: 3px 10px;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  z-index: 1;
+}
+
+.new-badge {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background: #28a745;
+  color: white;
+  padding: 3px 10px;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  z-index: 1;
+}
+
+.wishlist-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 36px;
+  height: 36px;
+  background: white;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: var(--shadow-sm);
+  transition: var(--transition);
+  z-index: 2;
+}
+
+.wishlist-btn:hover {
+  transform: scale(1.15);
+}
+
+.wishlist-btn.active i,
+.wishlist-btn:hover i {
+  color: #dc3545 !important;
+}
+
+.product-card .card-body {
+  padding: 14px;
+}
+
+.product-category {
+  font-size: 0.72rem;
+  color: #888;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.product-title {
+  font-size: 0.92rem;
+  font-weight: 600;
+  color: #222;
+  margin: 4px 0 8px;
+  line-height: 1.3;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.price-current {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--primary);
+}
+
+.price-original {
+  font-size: 0.85rem;
+  color: #aaa;
+  text-decoration: line-through;
+  margin-left: 6px;
+}
+
+.out-of-stock-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: 600;
+  font-size: 1rem;
+  z-index: 1;
+}
+
+/* ========================================
+   6. CATEGORY CARDS
+   ======================================== */
+.category-card {
+  border-radius: 16px;
+  padding: 20px 10px;
+  text-align: center;
+  cursor: pointer;
+  transition: var(--transition);
+  background: white;
+  box-shadow: var(--shadow-sm);
+}
+
+.category-card:hover {
+  transform: translateY(-4px) scale(1.02);
+  box-shadow: var(--shadow-md);
+}
+
+.category-icon {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 10px;
+  font-size: 1.5rem;
+}
+
+/* ========================================
+   7. STAR RATING
+   ======================================== */
+.stars {
+  color: #ffc107;
+  font-size: 0.85rem;
+  letter-spacing: 1px;
+}
+
+.stars-empty {
+  color: #dee2e6;
+}
+
+/* ========================================
+   8. CART PAGE
+   ======================================== */
+.cart-item {
+  background: white;
+  border-radius: var(--radius);
+  padding: 16px;
+  margin-bottom: 12px;
+  box-shadow: var(--shadow-sm);
+  transition: var(--transition);
+}
+
+.cart-item:hover {
+  box-shadow: var(--shadow-md);
+}
+
+.cart-item-img {
+  width: 90px;
+  height: 90px;
+  object-fit: cover;
+  border-radius: var(--radius-sm);
+}
+
+.qty-input {
+  width: 55px;
+  text-align: center;
+  font-weight: 600;
+}
+
+.qty-btn {
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border-radius: 50%;
+  font-size: 0.8rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.order-summary-card {
+  background: white;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-md);
+  padding: 24px;
+  position: sticky;
+  top: 90px;
+}
+
+/* ========================================
+   9. ORDER STATUS BADGES
+   ======================================== */
+.badge-pending {
+  background: #fff3cd;
+  color: #856404;
+}
+
+.badge-processing {
+  background: #cff4fc;
+  color: #055160;
+}
+
+.badge-shipped {
+  background: #cfe2ff;
+  color: #084298;
+}
+
+.badge-delivered {
+  background: #d1e7dd;
+  color: #0a3622;
+}
+
+.badge-cancelled {
+  background: #f8d7da;
+  color: #842029;
+}
+
+.status-badge {
+  padding: 5px 14px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  display: inline-block;
+}
+
+/* ========================================
+   10. CHECKOUT
+   ======================================== */
+.checkout-card {
+  background: white;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-sm);
+  padding: 24px;
+  margin-bottom: 20px;
+}
+
+.checkout-card h5 {
+  font-weight: 700;
+  margin-bottom: 20px;
+  padding-bottom: 10px;
+  border-bottom: 2px solid #f0f0f0;
+}
+
+.payment-option {
+  border: 2px solid #dee2e6;
+  border-radius: var(--radius-sm);
+  padding: 16px;
+  cursor: pointer;
+  transition: var(--transition);
+  margin-bottom: 10px;
+}
+
+.payment-option:hover {
+  border-color: var(--primary);
+}
+
+.payment-option.selected {
+  border-color: var(--primary);
+  background: #f0efff;
+}
+
+/* ========================================
+   11. AUTHENTICATION PAGES
+   ======================================== */
+.auth-card {
+  max-width: 480px;
+  margin: 60px auto;
+  background: white;
+  border-radius: 20px;
+  box-shadow: var(--shadow-lg);
+  padding: 40px;
+}
+
+.auth-header {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.auth-header .brand-icon {
+  font-size: 3rem;
+  color: var(--primary);
+}
+
+.form-control:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(108, 99, 255, 0.15);
+}
+
+.form-select:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(108, 99, 255, 0.15);
+}
+
+/* ========================================
+   12. FOOTER
+   ======================================== */
+footer {
+  background: var(--dark);
+  color: #adb5bd;
+  padding: 50px 0 20px;
+  margin-top: 80px;
+}
+
+footer h5,
+footer h6 {
+  color: white;
+  font-weight: 600;
+  margin-bottom: 16px;
+}
+
+footer a {
+  color: #adb5bd;
+  transition: var(--transition);
+  display: block;
+  margin-bottom: 6px;
+}
+
+footer a:hover {
+  color: white;
+  padding-left: 5px;
+}
+
+.footer-bottom {
+  border-top: 1px solid #343a40;
+  margin-top: 40px;
+  padding-top: 20px;
+  font-size: 0.85rem;
+}
+
+/* ========================================
+   13. UTILITY CLASSES
+   ======================================== */
+.hover-lift {
+  transition: var(--transition);
+}
+
+.hover-lift:hover {
+  transform: translateY(-3px);
+}
+
+.section-title {
+  font-weight: 800;
+  font-size: 1.8rem;
+  position: relative;
+  padding-bottom: 12px;
+}
+
+.section-title::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 50px;
+  height: 4px;
+  background: var(--primary);
+  border-radius: 2px;
+}
+
+.text-center .section-title::after {
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.promo-banner {
+  background: linear-gradient(135deg, #1a1a2e, #16213e);
+  color: white;
+}
+
+/* ========================================
+   14. TOAST NOTIFICATIONS
+   ======================================== */
+.toast-container {
+  position: fixed;
+  top: 80px;
+  right: 20px;
+  z-index: 9999;
+}
+
+/* ========================================
+   15. LOADING SPINNER
+   ======================================== */
+.btn-loading {
+  pointer-events: none;
+  opacity: 0.8;
+}
+
+.btn-loading::after {
+  content: '';
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  border: 2px solid transparent;
+  border-top-color: white;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  margin-left: 8px;
+  vertical-align: middle;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ========================================
+   16. BACK TO TOP BUTTON
+   ======================================== */
+#back-to-top {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  z-index: 9998;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  box-shadow: var(--shadow-md);
+  border: none;
+  font-size: 1rem;
+}
+
+#back-to-top.show {
+  display: flex;
+}
+
+/* ========================================
+   17. BREADCRUMB
+   ======================================== */
+.breadcrumb-item a {
+  color: var(--primary);
+}
+
+.breadcrumb-item.active {
+  color: #6c757d;
+}
+
+/* ========================================
+   18. PRODUCT DETAIL IMAGE ZOOM
+   ======================================== */
+.product-main-img {
+  transition: transform 0.4s ease;
+  cursor: zoom-in;
+}
+
+.product-main-img-wrapper {
+  overflow: hidden;
+  border-radius: var(--radius);
+}
+
+/* ========================================
+   19. RESPONSIVE TWEAKS
+   ======================================== */
+@media (max-width: 992px) {
+  .search-form {
+    width: 100%;
+    margin: 10px 0;
+  }
+}
+
+@media (max-width: 768px) {
+  .hero-section {
+    min-height: 320px;
+    padding: 40px 0;
+  }
+
+  .hero-title {
+    font-size: 1.8rem;
+  }
+
+  .product-img {
+    height: 180px;
+  }
+
+  .cart-item-img {
+    width: 70px;
+    height: 70px;
+  }
+
+  .auth-card {
+    margin: 20px;
+    padding: 24px;
+  }
+
+  .order-summary-card {
+    position: static;
+  }
+
+  .section-title {
+    font-size: 1.4rem;
+  }
+
+  .cart-item {
+    flex-wrap: wrap;
+  }
+}
+
+@media (max-width: 576px) {
+  .hero-title {
+    font-size: 1.5rem;
+  }
+
+  .product-img {
+    height: 150px;
+  }
+
+  .category-icon {
+    width: 50px;
+    height: 50px;
+    font-size: 1.2rem;
+  }
+}
+
+/* ========================================
+   20. CUSTOM SCROLLBAR
+   ======================================== */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #999;
+}
+
+/* ========================================
+   21. ANIMATIONS
+   ======================================== */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fade-in-up {
+  animation: fadeInUp 0.5s ease forwards;
+}
+
+/* ========================================
+   22. BTN OVERRIDES
+   ======================================== */
+.btn-primary {
+  background-color: var(--primary);
+  border-color: var(--primary);
+}
+
+.btn-primary:hover {
+  background-color: var(--primary-dark);
+  border-color: var(--primary-dark);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(108, 99, 255, 0.3);
+}
+
+.btn-outline-primary {
+  color: var(--primary);
+  border-color: var(--primary);
+}
+
+.btn-outline-primary:hover {
+  background-color: var(--primary);
+  border-color: var(--primary);
+}
+
+.text-primary {
+  color: var(--primary) !important;
+}
+
+/* ========================================
+   23. ALERT AUTO-DISMISS ANIMATION
+   ======================================== */
+.alert {
+  animation: fadeInUp 0.3s ease;
+}
+
+.alert.fade-out {
+  opacity: 0;
+  transform: translateY(-10px);
+  transition: all 0.3s ease;
+}
