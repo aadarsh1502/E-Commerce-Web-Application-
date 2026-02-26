@@ -1,0 +1,151 @@
+{% extends 'base.html' %}
+
+{% block title %}Shopping Cart{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <nav aria-label="breadcrumb" class="mb-3">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+            <li class="breadcrumb-item active">Cart</li>
+        </ol>
+    </nav>
+
+    {% if cart.is_empty %}
+    <!-- ═══ EMPTY CART STATE ═══ -->
+    <div class="text-center py-5">
+        <i class="fas fa-shopping-cart fa-5x text-muted mb-3" style="opacity: 0.3;"></i>
+        <h4 class="fw-600 text-muted">Your cart is empty</h4>
+        <p class="text-muted">Looks like you haven't added anything yet.</p>
+        <a href="{% url 'product_list' %}" class="btn btn-primary btn-lg mt-2">
+            <i class="fas fa-shopping-bag me-2"></i>Start Shopping
+        </a>
+    </div>
+
+    {% else %}
+    <!-- ═══ CART WITH ITEMS ═══ -->
+    <h4 class="fw-700 mb-4">
+        <i class="fas fa-shopping-cart me-2 text-primary"></i>
+        Shopping Cart <small class="text-muted fw-400">({{ cart.total_items }} item{{ cart.total_items|pluralize
+            }})</small>
+    </h4>
+
+    <div class="row g-4">
+        <!-- LEFT: Cart Items -->
+        <div class="col-md-8">
+            {% for item in cart_items %}
+            <div class="cart-item d-flex align-items-center gap-3" id="cart-item-{{ item.id }}">
+                <!-- Product Image -->
+                <a href="{{ item.product.get_absolute_url }}">
+                    {% if item.product.image %}
+                    <img src="{{ item.product.image.url }}" class="cart-item-img" alt="{{ item.product.name }}">
+                    {% else %}
+                    <img src="https://via.placeholder.com/90x90/6C63FF/FFF?text=Product" class="cart-item-img"
+                        alt="{{ item.product.name }}">
+                    {% endif %}
+                </a>
+
+                <!-- Product Info -->
+                <div class="flex-grow-1">
+                    <a href="{{ item.product.get_absolute_url }}" class="text-decoration-none">
+                        <h6 class="fw-600 mb-1 text-dark">{{ item.product.name|truncatewords:8 }}</h6>
+                    </a>
+                    <small class="text-muted">{{ item.product.category.name }}</small>
+                    <div class="mt-1">
+                        <span class="text-muted small">₹{{ item.product.effective_price }} each</span>
+                    </div>
+                </div>
+
+                <!-- Quantity Controls -->
+                <div class="d-flex align-items-center gap-1">
+                    <button type="button" class="btn btn-outline-secondary btn-sm qty-btn cart-qty-decrease"
+                        data-item-id="{{ item.id }}">
+                        <i class="fas fa-minus"></i>
+                    </button>
+                    <input type="number" class="form-control form-control-sm qty-input cart-qty-input"
+                        value="{{ item.quantity }}" min="1" max="{{ item.product.stock }}" data-item-id="{{ item.id }}"
+                        data-update-url="{% url 'update_cart' item.id %}" data-max-stock="{{ item.product.stock }}">
+                    <button type="button" class="btn btn-outline-secondary btn-sm qty-btn cart-qty-increase"
+                        data-item-id="{{ item.id }}" data-max="{{ item.product.stock }}">
+                        <i class="fas fa-plus"></i>
+                    </button>
+                </div>
+
+                <!-- Subtotal -->
+                <div class="text-end" style="min-width: 90px;">
+                    <span class="fw-bold text-primary subtotal-{{ item.id }}">₹{{ item.subtotal }}</span>
+                </div>
+
+                <!-- Remove -->
+                <form method="post" action="{% url 'remove_from_cart' item.id %}" class="remove-item-form">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-sm text-danger remove-item-btn" title="Remove">
+                        <i class="fas fa-times fa-lg"></i>
+                    </button>
+                </form>
+            </div>
+            {% endfor %}
+
+            <!-- Clear Cart -->
+            <div class="mt-3">
+                <form method="post" action="{% url 'clear_cart' %}">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-outline-danger btn-sm"
+                        onclick="return confirm('Clear all items from your cart?')">
+                        <i class="fas fa-trash me-1"></i>Clear Cart
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <!-- RIGHT: Order Summary -->
+        <div class="col-md-4">
+            <div class="order-summary-card">
+                <h5 class="fw-700 mb-3">Order Summary</h5>
+                <table class="table table-borderless mb-3">
+                    <tr>
+                        <td class="text-muted">Subtotal</td>
+                        <td class="text-end fw-600 cart-total">₹{{ cart.total_price }}</td>
+                    </tr>
+                    <tr>
+                        <td class="text-muted">Shipping</td>
+                        <td class="text-end fw-600">
+                            {% if cart.total_price >= 499 %}
+                            <span class="text-success">Free</span>
+                            {% else %}
+                            ₹49
+                            {% endif %}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="text-muted">Tax (5%)</td>
+                        <td class="text-end fw-600">₹{{ cart.total_price|floatformat:0 }}</td>
+                    </tr>
+                    <tr class="border-top">
+                        <td class="fw-700 fs-5">Total</td>
+                        <td class="text-end fw-700 fs-5 text-primary cart-total">₹{{ cart.total_price }}</td>
+                    </tr>
+                </table>
+
+                <a href="{% url 'checkout' %}" class="btn btn-success btn-lg w-100 mb-3">
+                    <i class="fas fa-lock me-2"></i>Proceed to Checkout
+                </a>
+
+                <div class="text-center">
+                    <a href="{% url 'product_list' %}" class="text-muted text-decoration-none small">
+                        <i class="fas fa-arrow-left me-1"></i>Continue Shopping
+                    </a>
+                </div>
+
+                <hr>
+                <div class="d-flex justify-content-around text-center small text-muted">
+                    <div><i class="fas fa-lock text-success mb-1 d-block"></i>Secure</div>
+                    <div><i class="fas fa-truck text-primary mb-1 d-block"></i>Free Ship</div>
+                    <div><i class="fas fa-undo text-info mb-1 d-block"></i>Easy Return</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

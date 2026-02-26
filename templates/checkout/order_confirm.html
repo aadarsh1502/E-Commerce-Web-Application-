@@ -1,0 +1,125 @@
+{% extends 'base.html' %}
+
+{% block title %}Order Confirmed{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <!-- Progress Bar -->
+    <div class="d-flex justify-content-center mb-4">
+        <div class="d-flex align-items-center gap-2">
+            <span class="badge bg-success rounded-pill px-3 py-2"><i class="fas fa-check me-1"></i>Cart</span>
+            <i class="fas fa-chevron-right text-muted small"></i>
+            <span class="badge bg-success rounded-pill px-3 py-2"><i class="fas fa-check me-1"></i>Checkout</span>
+            <i class="fas fa-chevron-right text-muted small"></i>
+            <span class="badge bg-success rounded-pill px-3 py-2"><i
+                    class="fas fa-check-circle me-1"></i>Confirmed</span>
+        </div>
+    </div>
+
+    <div class="text-center mb-5">
+        <div class="mb-3">
+            <i class="fas fa-check-circle text-success" style="font-size: 5rem;"></i>
+        </div>
+        <h2 class="fw-800 mb-2">Order Placed Successfully!</h2>
+        <p class="text-muted lead">Thank you for shopping with ShopZone</p>
+        <p class="fw-600">Order ID: <span class="text-primary">{{ order.order_id }}</span></p>
+    </div>
+
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card border-0 shadow-sm p-4 mb-4">
+                <h5 class="fw-700 mb-3"><i class="fas fa-box me-2 text-primary"></i>Order Details</h5>
+
+                <div class="row g-3 mb-3">
+                    <div class="col-md-6">
+                        <table class="table table-sm table-borderless">
+                            <tr>
+                                <td class="text-muted">Order ID</td>
+                                <td class="fw-600">{{ order.order_id }}</td>
+                            </tr>
+                            <tr>
+                                <td class="text-muted">Date</td>
+                                <td>{{ order.created_at|date:"M d, Y h:i A" }}</td>
+                            </tr>
+                            <tr>
+                                <td class="text-muted">Payment</td>
+                                <td>
+                                    {% if order.payment_method == 'cod' %}
+                                    <span class="badge bg-warning text-dark">Cash on Delivery</span>
+                                    {% else %}
+                                    <span class="badge bg-success">Paid Online</span>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="text-muted">Status</td>
+                                <td><span class="status-badge badge-{{ order.order_status }}">{{
+                                        order.get_order_status_display }}</span></td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="col-md-6">
+                        <h6 class="fw-600 small text-muted text-uppercase mb-2">Shipping To</h6>
+                        <p class="mb-1 fw-600">{{ order.shipping_name }}</p>
+                        <p class="mb-1 small text-muted">{{ order.shipping_address }}</p>
+                        <p class="mb-1 small text-muted">{{ order.shipping_city }}, {{ order.shipping_state }} - {{
+                            order.shipping_pincode }}</p>
+                        <p class="mb-0 small text-muted"><i class="fas fa-phone me-1"></i>{{ order.shipping_phone }}</p>
+                    </div>
+                </div>
+
+                <hr>
+
+                <h6 class="fw-700 mb-3">Items Ordered</h6>
+                {% for item in order_items %}
+                <div
+                    class="d-flex align-items-center gap-3 mb-2 pb-2 {% if not forloop.last %}border-bottom{% endif %}">
+                    {% if item.product_image %}
+                    <img src="{{ item.product_image }}" class="rounded"
+                        style="width: 60px; height: 60px; object-fit: cover;" alt="{{ item.product_name }}">
+                    {% else %}
+                    <div class="bg-light rounded d-flex align-items-center justify-content-center"
+                        style="width: 60px; height: 60px;">
+                        <i class="fas fa-image text-muted"></i>
+                    </div>
+                    {% endif %}
+                    <div class="flex-grow-1">
+                        <p class="mb-0 fw-600">{{ item.product_name }}</p>
+                        <small class="text-muted">Qty: {{ item.quantity }} × ₹{{ item.product_price }}</small>
+                    </div>
+                    <span class="fw-bold text-primary">₹{{ item.subtotal }}</span>
+                </div>
+                {% endfor %}
+
+                <hr>
+
+                <table class="table table-borderless table-sm text-end">
+                    <tr>
+                        <td class="text-start text-muted">Subtotal</td>
+                        <td class="fw-600">₹{{ order.total_amount }}</td>
+                    </tr>
+                    {% if order.discount_amount > 0 %}
+                    <tr>
+                        <td class="text-start text-success">Discount</td>
+                        <td class="fw-600 text-success">-₹{{ order.discount_amount }}</td>
+                    </tr>
+                    {% endif %}
+                    <tr class="border-top">
+                        <td class="text-start fw-700 fs-5">Total Paid</td>
+                        <td class="fw-700 fs-5 text-primary">₹{{ order.final_amount }}</td>
+                    </tr>
+                </table>
+            </div>
+
+            <div class="text-center">
+                <a href="{% url 'order_history' %}" class="btn btn-outline-primary me-2">
+                    <i class="fas fa-box me-1"></i>View All Orders
+                </a>
+                <a href="{% url 'product_list' %}" class="btn btn-primary">
+                    <i class="fas fa-shopping-bag me-1"></i>Continue Shopping
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

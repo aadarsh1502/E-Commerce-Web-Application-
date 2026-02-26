@@ -1,0 +1,244 @@
+{% extends 'base.html' %}
+
+{% block title %}Checkout{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <!-- Progress Bar -->
+    <div class="d-flex justify-content-center mb-4">
+        <div class="d-flex align-items-center gap-2">
+            <span class="badge bg-success rounded-pill px-3 py-2">
+                <i class="fas fa-check me-1"></i>Cart
+            </span>
+            <i class="fas fa-chevron-right text-muted small"></i>
+            <span class="badge bg-primary rounded-pill px-3 py-2">
+                <i class="fas fa-credit-card me-1"></i>Checkout
+            </span>
+            <i class="fas fa-chevron-right text-muted small"></i>
+            <span class="badge bg-secondary rounded-pill px-3 py-2">
+                <i class="fas fa-check-circle me-1"></i>Confirmation
+            </span>
+        </div>
+    </div>
+
+    <h4 class="fw-700 mb-4">
+        <i class="fas fa-lock me-2 text-primary"></i>Secure Checkout
+    </h4>
+
+    <div class="row g-4">
+        <!-- LEFT: Checkout Form -->
+        <div class="col-md-7">
+            <form method="post" action="{% url 'place_order' %}" id="checkout-form" class="needs-validation" novalidate>
+                {% csrf_token %}
+
+                <!-- SECTION 1: Delivery Information -->
+                <div class="checkout-card">
+                    <h5><i class="fas fa-truck me-2 text-primary"></i>Delivery Information</h5>
+                    <div class="row g-3">
+                        <div class="col-md-8">
+                            <label class="form-label small fw-600">Full Name</label>
+                            {{ form.full_name }}
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label small fw-600">Phone</label>
+                            {{ form.phone }}
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label small fw-600">Email</label>
+                            {{ form.email }}
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label small fw-600">Address</label>
+                            {{ form.address }}
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label small fw-600">City</label>
+                            {{ form.city }}
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label small fw-600">State</label>
+                            {{ form.state }}
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label small fw-600">PIN Code</label>
+                            {{ form.pincode }}
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SECTION 2: Payment Method -->
+                <div class="checkout-card">
+                    <h5><i class="fas fa-credit-card me-2 text-primary"></i>Payment Method</h5>
+
+                    <div class="payment-option mb-2" onclick="selectPayment('cod', this)">
+                        <div class="form-check d-flex align-items-center gap-3">
+                            <input class="form-check-input" type="radio" name="payment_method" id="pay-cod" value="cod"
+                                checked>
+                            <label class="form-check-label w-100" for="pay-cod">
+                                <div class="d-flex align-items-center gap-2">
+                                    <i class="fas fa-truck fa-lg text-success"></i>
+                                    <div>
+                                        <strong>Cash on Delivery</strong>
+                                        <p class="text-muted small mb-0">Pay when your order is delivered</p>
+                                    </div>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="payment-option" onclick="selectPayment('sim', this)">
+                        <div class="form-check d-flex align-items-center gap-3">
+                            <input class="form-check-input" type="radio" name="payment_method" id="pay-sim" value="sim">
+                            <label class="form-check-label w-100" for="pay-sim">
+                                <div class="d-flex align-items-center gap-2">
+                                    <i class="fas fa-credit-card fa-lg text-primary"></i>
+                                    <div>
+                                        <strong>Simulated Online Payment</strong>
+                                        <p class="text-muted small mb-0">Instant order confirmation</p>
+                                    </div>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Fake Card Fields (UI showcase only) -->
+                    <div id="fake-card-fields" style="display: none;" class="mt-3 p-3 bg-light rounded">
+                        <p class="small text-muted mb-2"><i class="fas fa-info-circle me-1"></i>Simulated payment — no
+                            real charges</p>
+                        <div class="row g-2">
+                            <div class="col-12">
+                                <input type="text" class="form-control form-control-sm" value="**** **** **** 4242"
+                                    disabled>
+                            </div>
+                            <div class="col-6">
+                                <input type="text" class="form-control form-control-sm" value="12/28" disabled
+                                    placeholder="MM/YY">
+                            </div>
+                            <div class="col-6">
+                                <input type="text" class="form-control form-control-sm" value="***" disabled
+                                    placeholder="CVV">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SECTION 3: Coupon Code -->
+                <div class="checkout-card">
+                    <h5><i class="fas fa-tag me-2 text-primary"></i>Have a Coupon?</h5>
+                    <div class="input-group">
+                        <input type="text" class="form-control" id="coupon-input" placeholder="Enter coupon code" {% if coupon %}value="{{ coupon.code }}" disabled{% endif %}>
+
+<button type="button" class="btn btn-outline-primary" id="apply-coupon-btn" {% if coupon %}disabled{% endif %}>
+                            {% if coupon %}<i class="fas fa-check me-1"></i>Applied{% else %}Apply{% endif %}
+                        </button>
+                    </div>
+                    <div id="coupon-message" class="small mt-2">
+                        {% if coupon %}
+                        <span class="text-success"><i class="fas fa-check-circle me-1"></i>Coupon {{ coupon.code }}
+                            applied! You save ₹{{ discount }}</span>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <!-- Mobile Submit -->
+                <div class="d-md-none mt-3">
+                    <button type="submit" class="btn btn-success btn-lg w-100">
+                        <i class="fas fa-lock me-2"></i>Place Order Securely
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <!-- RIGHT: Order Summary -->
+        <div class="col-md-5">
+            <div class="order-summary-card">
+                <h5 class="fw-700 mb-3">Your Order</h5>
+
+                <div style="max-height: 300px; overflow-y: auto;" class="mb-3">
+                    {% for item in cart_items %}
+                    <div
+                        class="d-flex gap-2 align-items-center mb-2 pb-2 {% if not forloop.last %}border-bottom{% endif %}">
+                        {% if item.product.image %}
+                        <img src="{{ item.product.image.url }}" class="rounded"
+                            style="width: 50px; height: 50px; object-fit: cover;" alt="{{ item.product.name }}">
+                        {% else %}
+                        <div class="bg-light rounded d-flex align-items-center justify-content-center"
+                            style="width: 50px; height: 50px;">
+                            <i class="fas fa-image text-muted"></i>
+                        </div>
+                        {% endif %}
+                        <div class="flex-grow-1">
+                            <p class="mb-0 small fw-600">{{ item.product.name|truncatewords:5 }}</p>
+                            <small class="text-muted">{{ item.quantity }} × ₹{{ item.product.effective_price }}</small>
+                        </div>
+                        <span class="fw-600 small">₹{{ item.subtotal }}</span>
+                    </div>
+                    {% endfor %}
+                </div>
+
+                <hr>
+
+                <table class="table table-borderless table-sm mb-3">
+                    <tr>
+                        <td class="text-muted">Subtotal</td>
+                        <td class="text-end fw-600">₹{{ cart.total_price }}</td>
+                    </tr>
+                    {% if discount > 0 %}
+                    <tr id="discount-row">
+                        <td class="text-success">Discount</td>
+                        <td class="text-end fw-600 text-success">-₹{{ discount }}</td>
+                    </tr>
+                    {% else %}
+                    <tr id="discount-row" style="display: none;">
+                        <td class="text-success">Discount</td>
+                        <td class="text-end fw-600 text-success" id="discount-amount">-₹0</td>
+                    </tr>
+                    {% endif %}
+                    <tr>
+                        <td class="text-muted">Shipping</td>
+                        <td class="text-end fw-600">
+                            {% if cart.total_price >= 499 %}
+                            <span class="text-success">Free</span>
+                            {% else %}
+                            ₹49
+                            {% endif %}
+                        </td>
+                    </tr>
+                    <tr class="border-top">
+                        <td class="fw-700 fs-5">Total</td>
+                        <td class="text-end fw-700 fs-5 text-primary" id="final-total">₹{{ final_total }}</td>
+                    </tr>
+                </table>
+
+                <button type="submit" form="checkout-form" class="btn btn-success btn-lg w-100 d-none d-md-block">
+                    <i class="fas fa-lock me-2"></i>Place Order Securely
+                </button>
+
+                <p class="text-muted text-center small mt-2 mb-0">
+                    By placing your order you agree to our Terms & Conditions
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    function selectPayment(method, element) {
+        document.querySelectorAll('.payment-option').forEach(el => el.classList.remove('selected'));
+        element.classList.add('selected');
+        element.querySelector('input[type="radio"]').checked = true;
+
+        const fakeFields = document.getElementById('fake-card-fields');
+        if (method === 'sim') {
+            fakeFields.style.display = 'block';
+        } else {
+            fakeFields.style.display = 'none';
+        }
+    }
+
+    // Set initial selected state
+    document.querySelector('.payment-option').classList.add('selected');
+</script>
+{% endblock %}

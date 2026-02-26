@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+
+{% block title %}Login{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="auth-card">
+        <div class="auth-header">
+            <i class="fas fa-shopping-bag brand-icon"></i>
+            <h3 class="fw-700 mt-2">Welcome Back</h3>
+            <p class="text-muted">Sign in to your ShopZone account</p>
+        </div>
+
+        <form method="post" action="{% url 'login' %}">
+            {% csrf_token %}
+            {% if form.errors %}
+            <div class="alert alert-danger">
+                <i class="fas fa-exclamation-circle me-2"></i>
+                Invalid username or password. Please try again.
+            </div>
+            {% endif %}
+
+            <div class="mb-3">
+                <label class="form-label fw-600 small">Username</label>
+                <div class="input-group">
+                    <span class="input-group-text"><i class="fas fa-user"></i></span>
+                    <input type="text" name="username" class="form-control" placeholder="Enter your username"
+                        value="{{ form.username.value|default:'' }}" required autofocus>
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label fw-600 small">Password</label>
+                <div class="input-group">
+                    <span class="input-group-text"><i class="fas fa-lock"></i></span>
+                    <input type="password" name="password" class="form-control" placeholder="Enter your password"
+                        required>
+                </div>
+            </div>
+
+            {% if next %}
+            <input type="hidden" name="next" value="{{ next }}">
+            {% endif %}
+
+            <button type="submit" class="btn btn-primary w-100 btn-lg mb-3">
+                <i class="fas fa-sign-in-alt me-2"></i>Sign In
+            </button>
+
+            <div class="text-center">
+                <p class="text-muted mb-0">
+                    Don't have an account? <a href="{% url 'register' %}" class="text-primary fw-600">Create one</a>
+                </p>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

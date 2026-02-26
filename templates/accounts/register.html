@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+
+{% block title %}Register{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="auth-card" style="max-width: 560px;">
+        <div class="auth-header">
+            <i class="fas fa-shopping-bag brand-icon"></i>
+            <h3 class="fw-700 mt-2">Create Account</h3>
+            <p class="text-muted">Join ShopZone and start shopping</p>
+        </div>
+
+        <form method="post" action="{% url 'register' %}">
+            {% csrf_token %}
+
+            {% if form.errors %}
+            <div class="alert alert-danger">
+                <i class="fas fa-exclamation-circle me-2"></i>
+                Please correct the errors below.
+                <ul class="mb-0 mt-1 small">
+                    {% for field in form %}
+                    {% for error in field.errors %}
+                    <li>{{ field.label }}: {{ error }}</li>
+                    {% endfor %}
+                    {% endfor %}
+                    {% for error in form.non_field_errors %}
+                    <li>{{ error }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+            {% endif %}
+
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <label class="form-label fw-600 small">First Name</label>
+                    {{ form.first_name }}
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label fw-600 small">Last Name</label>
+                    {{ form.last_name }}
+                </div>
+                <div class="col-12">
+                    <label class="form-label fw-600 small">Username</label>
+                    {{ form.username }}
+                    {% if form.username.help_text %}
+                    <div class="form-text small">{{ form.username.help_text }}</div>
+                    {% endif %}
+                </div>
+                <div class="col-12">
+                    <label class="form-label fw-600 small">Email Address</label>
+                    {{ form.email }}
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label fw-600 small">Password</label>
+                    {{ form.password1 }}
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label fw-600 small">Confirm Password</label>
+                    {{ form.password2 }}
+                </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary w-100 btn-lg mt-4 mb-3">
+                <i class="fas fa-user-plus me-2"></i>Create Account
+            </button>
+
+            <div class="text-center">
+                <p class="text-muted mb-0">
+                    Already have an account? <a href="{% url 'login' %}" class="text-primary fw-600">Sign In</a>
+                </p>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

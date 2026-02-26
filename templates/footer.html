@@ -1,0 +1,55 @@
+<footer>
+    <div class="container">
+        <div class="row">
+            <!-- Brand & About -->
+            <div class="col-lg-4 col-md-6 mb-4">
+                <h5 class="text-white fw-700 mb-3">
+                    <i class="fas fa-shopping-bag me-2 text-primary"></i>ShopZone
+                </h5>
+                <p class="text-muted small">
+                    Your one-stop destination for quality products at unbeatable prices.
+                    Electronics, Fashion, Books, Sports, Home & Kitchen, and Beauty — we've got it all.
+                </p>
+                <div class="d-flex gap-3 mt-3">
+                    <a href="#" class="text-muted fs-5"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" class="text-muted fs-5"><i class="fab fa-twitter"></i></a>
+                    <a href="#" class="text-muted fs-5"><i class="fab fa-instagram"></i></a>
+                    <a href="#" class="text-muted fs-5"><i class="fab fa-linkedin-in"></i></a>
+                </div>
+            </div>
+
+            <!-- Quick Links -->
+            <div class="col-lg-2 col-md-6 mb-4">
+                <h6>Quick Links</h6>
+                <a href="{% url 'home' %}">Home</a>
+                <a href="{% url 'product_list' %}">Products</a>
+                <a href="{% url 'cart' %}">Cart</a>
+                <a href="{% url 'order_history' %}">My Orders</a>
+            </div>
+
+            <!-- Categories -->
+            <div class="col-lg-2 col-md-6 mb-4">
+                <h6>Categories</h6>
+                {% for cat in all_categories %}
+                <a href="{{ cat.get_absolute_url }}">{{ cat.name }}</a>
+                {% endfor %}
+            </div>
+
+            <!-- Contact Info -->
+            <div class="col-lg-4 col-md-6 mb-4">
+                <h6>Contact Us</h6>
+                <p class="small mb-2"><i class="fas fa-map-marker-alt me-2 text-primary"></i>123 Commerce Street,
+                    Mumbai, India</p>
+                <p class="small mb-2"><i class="fas fa-phone me-2 text-primary"></i>+91 98765 43210</p>
+                <p class="small mb-2"><i class="fas fa-envelope me-2 text-primary"></i>support@shopzone.com</p>
+                <p class="small mb-0"><i class="fas fa-clock me-2 text-primary"></i>Mon–Sat: 9AM – 9PM IST</p>
+            </div>
+        </div>
+
+        <!-- Footer Bottom -->
+        <div class="footer-bottom text-center">
+            <p class="mb-0">&copy; 2024 ShopZone. All rights reserved. Made with <i
+                    class="fas fa-heart text-danger"></i> in India.</p>
+        </div>
+    </div>
+</footer>
